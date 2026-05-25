@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 const Section = ({ children, align = "left" }) => {
   return (
@@ -22,6 +23,21 @@ const Section = ({ children, align = "left" }) => {
 };
 
 export const Overlay = () => {
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Security: Validate email input on submission as a second layer
+    if (!email || !email.includes("@")) {
+      return;
+    }
+    // Security: Avoid logging sensitive user data
+    // console.log("Form submitted with:", email);
+    setSubmitted(true);
+    // In a real app, you would send this to an API
+  };
+
   return (
     <div className="w-screen">
       <Section>
@@ -77,16 +93,32 @@ export const Overlay = () => {
         <p className="text-gray-300 text-2xl font-light leading-relaxed mb-10">
           Be among the first to experience the dawn of the spatial web.
         </p>
-        <form className="flex gap-2">
+        {submitted ? (
+          <div className="bg-white/5 backdrop-blur-xl p-6 rounded-2xl border border-white/10 text-center">
+            <p className="text-white font-bold text-xl mb-2">Access Requested</p>
+            <p className="text-gray-400">If eligible, you will receive an invitation shortly.</p>
+          </div>
+        ) : (
+          <form className="flex gap-2" onSubmit={handleSubmit}>
             <input
-                type="email"
-                placeholder="Enter your email"
-                className="bg-white/10 border border-white/20 rounded-full px-6 py-4 text-white flex-1 focus:outline-none focus:border-white/50"
+              type="email"
+              name="email"
+              autoComplete="email"
+              required
+              maxLength={320}
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="bg-white/10 border border-white/20 rounded-full px-6 py-4 text-white flex-1 focus:outline-none focus:border-white/50"
             />
-            <button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full font-bold hover:opacity-90 transition-opacity">
-                Secure Access
+            <button
+              type="submit"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full font-bold hover:opacity-90 transition-opacity"
+            >
+              Secure Access
             </button>
-        </form>
+          </form>
+        )}
       </Section>
     </div>
   );
