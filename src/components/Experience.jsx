@@ -1,9 +1,21 @@
-import { Float, MeshDistortMaterial, useScroll, Environment, ContactShadows, PresentationControls, Text } from "@react-three/drei";
+import { Float, MeshDistortMaterial, useScroll, Environment, ContactShadows } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
 
 const vec = new THREE.Vector3();
+
+const RINGS = [...Array(3)].map(() => ({
+    rotation: [Math.random() * Math.PI, Math.random() * Math.PI, 0]
+}));
+
+const PARTICLES = [...Array(100)].map(() => ({
+    position: [
+        (Math.random() - 0.5) * 20,
+        (Math.random() - 0.5) * 20,
+        (Math.random() - 0.5) * 20
+    ]
+}));
 
 export const Experience = () => {
   const scroll = useScroll();
@@ -64,8 +76,8 @@ export const Experience = () => {
         </Float>
 
         {/* Floating rings */}
-        {[...Array(3)].map((_, i) => (
-            <mesh key={i} rotation={[Math.random() * Math.PI, Math.random() * Math.PI, 0]}>
+        {RINGS.map((ring, i) => (
+            <mesh key={i} rotation={ring.rotation}>
                 <torusGeometry args={[2.5 + i * 0.5, 0.02, 16, 100]} />
                 <meshStandardMaterial color="white" emissive="white" emissiveIntensity={2} transparent opacity={0.5} />
             </mesh>
@@ -73,14 +85,10 @@ export const Experience = () => {
 
         {/* Particles */}
         <group>
-            {[...Array(100)].map((_, i) => (
+            {PARTICLES.map((particle, i) => (
                 <mesh
                     key={i}
-                    position={[
-                        (Math.random() - 0.5) * 20,
-                        (Math.random() - 0.5) * 20,
-                        (Math.random() - 0.5) * 20
-                    ]}
+                    position={particle.position}
                 >
                     <sphereGeometry args={[0.02, 8, 8]} />
                     <meshStandardMaterial color="white" emissive="white" emissiveIntensity={5} />
