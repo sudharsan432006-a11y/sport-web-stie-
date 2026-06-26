@@ -77,13 +77,21 @@ export const Overlay = () => {
         <p className="text-gray-300 text-2xl font-light leading-relaxed mb-10">
           Be among the first to experience the dawn of the spatial web.
         </p>
-        <form className="flex gap-2">
+        <form
+          className="flex gap-2"
+          onSubmit={(e) => e.preventDefault()} // Prevent default form submission to avoid data leakage in URL
+        >
             <input
                 type="email"
+                required
+                maxLength={320} // RFC 5321 limit for email addresses
                 placeholder="Enter your email"
                 className="bg-white/10 border border-white/20 rounded-full px-6 py-4 text-white flex-1 focus:outline-none focus:border-white/50"
             />
-            <button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full font-bold hover:opacity-90 transition-opacity">
+            <button
+              type="submit"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full font-bold hover:opacity-90 transition-opacity"
+            >
                 Secure Access
             </button>
         </form>
